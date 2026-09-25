@@ -1,3 +1,6 @@
+# _[下载](https://github.com/shayo-yoo/Novel-Assistant/releases/tag/v0.2.0)_
+
+
 # 小说助手（Novel Assistant）
 
 小说助手是一款面向中文小说创作者的 VS Code 扩展，覆盖从写作、统计到剧情管理的完整创作流程。
@@ -15,7 +18,7 @@
 
 ### 1.1 字数统计
 
-- 9 种计数模式：全字符 `all`、仅中文 `cjk`、中文加标点 `cjk_punct`、非空白 `non_whitespace`、起点 `qidian`、番茄 `fanqie`、中英混合 `mixed`、自定义正则 `custom_regex`、自定义权重 `custom_weight`
+- 9 种计数模式：全字符 `所有`、仅中文 `cjk`、中文加标点 `cjk_punct`、非空白 `non_whitespace`、起点 `qidian`、番茄 `fanqie`、中英混合 `mixed`、自定义正则 `custom_regex`、自定义权重 `custom_weight`
 - 状态栏常驻显示当前文档字数与模式；点击查看详情 / 切换模式
 - 选中文本后在状态栏显示选中字数
 - 可配置排除规则：标题行、作者备注（【作者的话】）、分隔线
