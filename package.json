@@ -1,0 +1,426 @@
+{
+  "name": "novel-assistant",
+  "displayName": "小说助手",
+  "description": "VS Code 小说写作辅助扩展：字数统计、创作时间、输入速度、格式化、高亮、番茄钟、每日目标、敏感词、章节面板、角色热力图、时间线、伏笔追踪、写作冲刺、对话高亮、打字机模式",
+  "version": "0.2.0",
+  "publisher": "local",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourname/novel-assistant.git"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization",
+    "Productivity"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:novelAssistant.initConfig",
+    "onCommand:novelAssistant.switchCountMode",
+    "onCommand:novelAssistant.configureCustomRegexMode",
+    "onCommand:novelAssistant.configureCustomWeightMode",
+    "onCommand:novelAssistant.viewCountDetails",
+    "onCommand:novelAssistant.formatDocument",
+    "onCommand:novelAssistant.formatSelection",
+    "onCommand:novelAssistant.formatWorkspace",
+    "onCommand:novelAssistant.addSelectionToHighlight",
+    "onCommand:novelAssistant.removeSelectionHighlight",
+    "onCommand:novelAssistant.customizeHighlightColor",
+    "onCommand:novelAssistant.manageHighlights",
+    "onCommand:novelAssistant.highlightAddWord",
+    "onCommand:novelAssistant.highlightRemoveWord",
+    "onCommand:novelAssistant.highlightToggleGroup",
+    "onCommand:novelAssistant.highlightRenameGroup",
+    "onCommand:novelAssistant.highlightChangeColor",
+    "onCommand:novelAssistant.highlightSetStyle",
+    "onCommand:novelAssistant.highlightDeleteGroup",
+    "onCommand:novelAssistant.toggleTimer",
+    "onCommand:novelAssistant.showSpeedDetails",
+    "onCommand:novelAssistant.setGoals",
+    "onCommand:novelAssistant.startPomodoro",
+    "onCommand:novelAssistant.pausePomodoro",
+    "onCommand:novelAssistant.stopPomodoro",
+    "onCommand:novelAssistant.setPomodoroDuration",
+    "onCommand:novelAssistant.startSprint",
+    "onCommand:novelAssistant.pauseSprint",
+    "onCommand:novelAssistant.stopSprint",
+    "onCommand:novelAssistant.toggleFocusMode",
+    "onCommand:novelAssistant.configureFocusMode",
+    "onCommand:novelAssistant.toggleTypewriter",
+    "onCommand:novelAssistant.toggleDialogueHighlight",
+    "onCommand:novelAssistant.manageSensitiveWords",
+    "onCommand:novelAssistant.newChapter",
+    "onCommand:novelAssistant.renameChapter",
+    "onCommand:novelAssistant.deleteChapter",
+    "onCommand:novelAssistant.setChapterStatus",
+    "onCommand:novelAssistant.refreshChapters",
+    "onCommand:novelAssistant.rebuildChapterIndex",
+    "onCommand:novelAssistant.sortChaptersByName",
+    "onCommand:novelAssistant.sortChaptersByWords",
+    "onCommand:novelAssistant.sortChaptersByMtime",
+    "onCommand:novelAssistant.addSelectionAsCharacter",
+    "onCommand:novelAssistant.addSelectionAsKeyProp",
+    "onCommand:novelAssistant.manageCharacters",
+    "onCommand:novelAssistant.exportCharacterHeatmap",
+    "onCommand:novelAssistant.timelineAdd",
+    "onCommand:novelAssistant.timelineEdit",
+    "onCommand:novelAssistant.timelineSetStatus",
+    "onCommand:novelAssistant.timelineRemove",
+    "onCommand:novelAssistant.timelineFilter",
+    "onCommand:novelAssistant.foreshadowAdd",
+    "onCommand:novelAssistant.foreshadowAdvance",
+    "onCommand:novelAssistant.foreshadowResolve",
+    "onCommand:novelAssistant.foreshadowSetStatus",
+    "onCommand:novelAssistant.foreshadowRemove",
+    "onCommand:novelAssistant.openStats",
+    "onCommand:novelAssistant.openHeatmap",
+    "onCommand:novelAssistant.clearStats",
+    "onCommand:novelAssistant.exportData",
+    "onCommand:novelAssistant.importData"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "小说助手",
+      "properties": {
+        "novelAssistant.defaultCountMode": {
+          "type": "string",
+          "default": "qidian",
+          "enum": ["all", "cjk", "cjk_punct", "non_whitespace", "qidian", "fanqie", "mixed", "custom_regex", "custom"],
+          "scope": "workspace",
+          "description": "默认字数统计模式"
+        },
+        "novelAssistant.defaultDailyWords": {
+          "type": "number",
+          "default": 2000,
+          "scope": "workspace",
+          "description": "默认每日字数目标"
+        },
+        "novelAssistant.defaultDailyMinutes": {
+          "type": "number",
+          "default": 60,
+          "scope": "workspace",
+          "description": "默认每日创作时间目标（分钟）"
+        },
+        "novelAssistant.defaultDailyPomodoros": {
+          "type": "number",
+          "default": 4,
+          "scope": "workspace",
+          "description": "默认每日番茄数目标"
+        },
+        "novelAssistant.defaultDailyActiveMinutes": {
+          "type": "number",
+          "default": 45,
+          "scope": "workspace",
+          "description": "默认每日有效输入时间目标（分钟）"
+        },
+        "novelAssistant.defaultPomodoroWorkMinutes": {
+          "type": "number",
+          "default": 25,
+          "scope": "workspace",
+          "description": "默认番茄工作时长（分钟）"
+        },
+        "novelAssistant.typewriterMode": {
+          "type": "boolean",
+          "default": false,
+          "scope": "workspace",
+          "description": "开启/关闭打字机模式"
+        },
+        "novelAssistant.dialogueHighlight": {
+          "type": "boolean",
+          "default": false,
+          "scope": "workspace",
+          "description": "开启/关闭对话行高亮"
+        },
+        "novelAssistant.autoFormatOnSave": {
+          "type": "boolean",
+          "default": false,
+          "scope": "workspace",
+          "description": "保存时自动格式化（默认关闭）"
+        },
+        "novelAssistant.maxHighlightMatches": {
+          "type": "number",
+          "default": 5000,
+          "scope": "workspace",
+          "description": "高亮最大匹配数"
+        }
+      }
+    },
+    "commands": [
+      { "command": "novelAssistant.initConfig", "title": "小说助手：初始化配置" },
+      { "command": "novelAssistant.switchCountMode", "title": "小说助手：切换字数统计模式" },
+      { "command": "novelAssistant.configureCustomRegexMode", "title": "小说助手：配置自定义正则字数模式" },
+      { "command": "novelAssistant.configureCustomWeightMode", "title": "小说助手：配置自定义权重字数模式" },
+      { "command": "novelAssistant.viewCountDetails", "title": "小说助手：查看字数统计详情" },
+      { "command": "novelAssistant.formatDocument", "title": "小说助手：格式化当前文档" },
+      { "command": "novelAssistant.formatSelection", "title": "小说助手：格式化选中段落" },
+      { "command": "novelAssistant.formatWorkspace", "title": "小说助手：格式化整个工作区" },
+      { "command": "novelAssistant.addSelectionToHighlight", "title": "小说助手：添加选中文本到高亮组" },
+      { "command": "novelAssistant.removeSelectionHighlight", "title": "小说助手：取消选中文本高亮" },
+      { "command": "novelAssistant.customizeHighlightColor", "title": "小说助手：自定义高亮颜色" },
+      { "command": "novelAssistant.manageHighlights", "title": "小说助手：管理高亮组" },
+      { "command": "novelAssistant.highlightAddWord", "title": "小说助手：添加高亮词" },
+      { "command": "novelAssistant.highlightRemoveWord", "title": "小说助手：删除高亮词" },
+      { "command": "novelAssistant.highlightToggleGroup", "title": "小说助手：启用/禁用高亮组" },
+      { "command": "novelAssistant.highlightRenameGroup", "title": "小说助手：重命名高亮组" },
+      { "command": "novelAssistant.highlightChangeColor", "title": "小说助手：修改高亮组颜色" },
+      { "command": "novelAssistant.highlightSetStyle", "title": "小说助手：设置高亮样式" },
+      { "command": "novelAssistant.highlightDeleteGroup", "title": "小说助手：删除高亮组" },
+      { "command": "novelAssistant.toggleTimer", "title": "小说助手：暂停/继续创作计时" },
+      { "command": "novelAssistant.showSpeedDetails", "title": "小说助手：查看输入速度详情" },
+      { "command": "novelAssistant.setGoals", "title": "小说助手：设置每日目标" },
+      { "command": "novelAssistant.startPomodoro", "title": "小说助手：开始番茄钟" },
+      { "command": "novelAssistant.pausePomodoro", "title": "小说助手：暂停番茄钟" },
+      { "command": "novelAssistant.stopPomodoro", "title": "小说助手：停止番茄钟" },
+      { "command": "novelAssistant.setPomodoroDuration", "title": "小说助手：设置番茄钟时长" },
+      { "command": "novelAssistant.startSprint", "title": "小说助手：开始写作冲刺" },
+      { "command": "novelAssistant.pauseSprint", "title": "小说助手：暂停写作冲刺" },
+      { "command": "novelAssistant.stopSprint", "title": "小说助手：停止写作冲刺" },
+      { "command": "novelAssistant.toggleFocusMode", "title": "小说助手：切换专注模式" },
+      { "command": "novelAssistant.configureFocusMode", "title": "小说助手：配置专注模式动作" },
+      { "command": "novelAssistant.toggleTypewriter", "title": "小说助手：切换打字机模式" },
+      { "command": "novelAssistant.toggleDialogueHighlight", "title": "小说助手：切换对话高亮" },
+      { "command": "novelAssistant.manageSensitiveWords", "title": "小说助手：管理敏感词" },
+      { "command": "novelAssistant.newChapter", "title": "小说助手：新建章节" },
+      { "command": "novelAssistant.renameChapter", "title": "小说助手：重命名章节" },
+      { "command": "novelAssistant.deleteChapter", "title": "小说助手：删除章节" },
+      { "command": "novelAssistant.setChapterStatus", "title": "小说助手：设置章节状态" },
+      { "command": "novelAssistant.refreshChapters", "title": "小说助手：刷新章节面板" },
+      { "command": "novelAssistant.rebuildChapterIndex", "title": "小说助手：重建章节索引" },
+      { "command": "novelAssistant.sortChaptersByName", "title": "小说助手：章节按文件名排序" },
+      { "command": "novelAssistant.sortChaptersByWords", "title": "小说助手：章节按字数排序" },
+      { "command": "novelAssistant.sortChaptersByMtime", "title": "小说助手：章节按修改时间排序" },
+      { "command": "novelAssistant.addSelectionAsCharacter", "title": "小说助手：将选中文本设为角色" },
+      { "command": "novelAssistant.addSelectionAsKeyProp", "title": "小说助手：将选中文本设为关键道具" },
+      { "command": "novelAssistant.manageCharacters", "title": "小说助手：管理角色" },
+      { "command": "novelAssistant.exportCharacterHeatmap", "title": "小说助手：导出角色热力图 CSV" },
+      { "command": "novelAssistant.timelineAdd", "title": "小说助手：添加时间线事件" },
+      { "command": "novelAssistant.timelineEdit", "title": "小说助手：编辑时间线事件" },
+      { "command": "novelAssistant.timelineSetStatus", "title": "小说助手：设置时间线事件状态" },
+      { "command": "novelAssistant.timelineRemove", "title": "小说助手：删除时间线事件" },
+      { "command": "novelAssistant.timelineFilter", "title": "小说助手：筛选时间线" },
+      { "command": "novelAssistant.foreshadowAdd", "title": "小说助手：埋设伏笔" },
+      { "command": "novelAssistant.foreshadowAdvance", "title": "小说助手：推进伏笔" },
+      { "command": "novelAssistant.foreshadowResolve", "title": "小说助手：回收伏笔" },
+      { "command": "novelAssistant.foreshadowSetStatus", "title": "小说助手：设置伏笔状态" },
+      { "command": "novelAssistant.foreshadowRemove", "title": "小说助手：删除伏笔" },
+      { "command": "novelAssistant.openStats", "title": "小说助手：打开写作统计" },
+      { "command": "novelAssistant.openHeatmap", "title": "小说助手：打开角色热力图" },
+      { "command": "novelAssistant.clearStats", "title": "小说助手：清除本工作区统计数据" },
+      { "command": "novelAssistant.exportData", "title": "小说助手：导出全部数据" },
+      { "command": "novelAssistant.importData", "title": "小说助手：导入数据" }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "novelAssistant",
+          "title": "小说助手",
+          "icon": "$(book)"
+        }
+      ]
+    },
+    "views": {
+      "novelAssistant": [
+        { "id": "novelAssistantChapters", "name": "章节面板" },
+        { "id": "novelAssistantHighlights", "name": "高亮管理" },
+        { "id": "novelAssistantCharacterHeatmap", "name": "角色热力图" },
+        { "id": "novelAssistantTimeline", "name": "故事时间线" },
+        { "id": "novelAssistantForeshadows", "name": "伏笔追踪" },
+        { "id": "novelAssistantStatsDashboard", "name": "写作统计" },
+        { "id": "novelAssistantSensitiveWords", "name": "敏感词" }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "novelAssistant.addSelectionToHighlight",
+          "when": "editorHasSelection",
+          "group": "novelAssistant@1"
+        },
+        {
+          "command": "novelAssistant.removeSelectionHighlight",
+          "when": "editorHasSelection",
+          "group": "novelAssistant@2"
+        },
+        {
+          "command": "novelAssistant.addSelectionAsCharacter",
+          "when": "editorHasSelection",
+          "group": "novelAssistant@3"
+        },
+        {
+          "command": "novelAssistant.addSelectionAsKeyProp",
+          "when": "editorHasSelection",
+          "group": "novelAssistant@4"
+        },
+        {
+          "command": "novelAssistant.formatSelection",
+          "when": "editorHasSelection",
+          "group": "novelAssistant@5"
+        },
+        {
+          "command": "novelAssistant.viewCountDetails",
+          "when": "editorHasSelection",
+          "group": "novelAssistant@6"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "novelAssistant.refreshChapters",
+          "when": "view == novelAssistantChapters",
+          "group": "navigation@1"
+        },
+        {
+          "command": "novelAssistant.newChapter",
+          "when": "view == novelAssistantChapters",
+          "group": "navigation@2"
+        },
+        {
+          "command": "novelAssistant.sortChaptersByName",
+          "when": "view == novelAssistantChapters",
+          "group": "navigation@3"
+        },
+        {
+          "command": "novelAssistant.sortChaptersByWords",
+          "when": "view == novelAssistantChapters",
+          "group": "navigation@4"
+        },
+        {
+          "command": "novelAssistant.sortChaptersByMtime",
+          "when": "view == novelAssistantChapters",
+          "group": "navigation@5"
+        },
+        {
+          "command": "novelAssistant.manageHighlights",
+          "when": "view == novelAssistantHighlights",
+          "group": "navigation"
+        },
+        {
+          "command": "novelAssistant.timelineAdd",
+          "when": "view == novelAssistantTimeline",
+          "group": "navigation"
+        },
+        {
+          "command": "novelAssistant.timelineFilter",
+          "when": "view == novelAssistantTimeline",
+          "group": "navigation"
+        },
+        {
+          "command": "novelAssistant.foreshadowAdd",
+          "when": "view == novelAssistantForeshadows",
+          "group": "navigation"
+        },
+        {
+          "command": "novelAssistant.manageSensitiveWords",
+          "when": "view == novelAssistantSensitiveWords",
+          "group": "navigation"
+        },
+        {
+          "command": "novelAssistant.manageCharacters",
+          "when": "view == novelAssistantCharacterHeatmap",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "novelAssistant.renameChapter",
+          "when": "view == novelAssistantChapters && viewItem == chapter",
+          "group": "inline@1"
+        },
+        {
+          "command": "novelAssistant.deleteChapter",
+          "when": "view == novelAssistantChapters && viewItem == chapter",
+          "group": "inline@2"
+        },
+        {
+          "command": "novelAssistant.setChapterStatus",
+          "when": "view == novelAssistantChapters && viewItem == chapter",
+          "group": "inline@3"
+        },
+        {
+          "command": "novelAssistant.highlightAddWord",
+          "when": "view == novelAssistantHighlights && viewItem == highlightGroup",
+          "group": "inline@1"
+        },
+        {
+          "command": "novelAssistant.highlightToggleGroup",
+          "when": "view == novelAssistantHighlights && viewItem == highlightGroup",
+          "group": "inline@2"
+        },
+        {
+          "command": "novelAssistant.highlightRenameGroup",
+          "when": "view == novelAssistantHighlights && viewItem == highlightGroup",
+          "group": "inline@3"
+        },
+        {
+          "command": "novelAssistant.highlightChangeColor",
+          "when": "view == novelAssistantHighlights && viewItem == highlightGroup",
+          "group": "inline@4"
+        },
+        {
+          "command": "novelAssistant.highlightSetStyle",
+          "when": "view == novelAssistantHighlights && viewItem == highlightGroup",
+          "group": "inline@5"
+        },
+        {
+          "command": "novelAssistant.highlightDeleteGroup",
+          "when": "view == novelAssistantHighlights && viewItem == highlightGroup",
+          "group": "inline@6"
+        },
+        {
+          "command": "novelAssistant.highlightRemoveWord",
+          "when": "view == novelAssistantHighlights && viewItem == highlightWord",
+          "group": "inline"
+        },
+        {
+          "command": "novelAssistant.timelineEdit",
+          "when": "view == novelAssistantTimeline && viewItem == timelineEvent",
+          "group": "inline@1"
+        },
+        {
+          "command": "novelAssistant.timelineSetStatus",
+          "when": "view == novelAssistantTimeline && viewItem == timelineEvent",
+          "group": "inline@2"
+        },
+        {
+          "command": "novelAssistant.timelineRemove",
+          "when": "view == novelAssistantTimeline && viewItem == timelineEvent",
+          "group": "inline@3"
+        },
+        {
+          "command": "novelAssistant.foreshadowAdvance",
+          "when": "view == novelAssistantForeshadows && viewItem == foreshadow",
+          "group": "inline@1"
+        },
+        {
+          "command": "novelAssistant.foreshadowResolve",
+          "when": "view == novelAssistantForeshadows && viewItem == foreshadow",
+          "group": "inline@2"
+        },
+        {
+          "command": "novelAssistant.foreshadowSetStatus",
+          "when": "view == novelAssistantForeshadows && viewItem == foreshadow",
+          "group": "inline@3"
+        },
+        {
+          "command": "novelAssistant.foreshadowRemove",
+          "when": "view == novelAssistantForeshadows && viewItem == foreshadow",
+          "group": "inline@4"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.5.4"
+  }
+}

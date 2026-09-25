@@ -1,0 +1,6 @@
+src/**
+.gitignore
+.vscode/**
+**/*.map
+**/*.ts
+!dist/**
